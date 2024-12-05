@@ -1,5 +1,10 @@
-from typing import List
-from functools import reduce
+# Define a local reduce function for the xor of the bytelist without further dependency
+def reduce(function, bytelist):
+    bytelist_iter = iter(bytelist)
+    result = next(bytelist_iter)
+    for element in bytelist_iter:
+        result = function(result, element)
+    return result
 
 sbox = [
     0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
@@ -95,7 +100,7 @@ def reverse_key_schedule(round_key: bytes, aes_round: int):
 
     return round_key
 
-def key_schedule(base_key: bytes) -> List[bytes]:
+def key_schedule(base_key: bytes) -> list[bytes]: # Replaced List with list to use native type for micropython compatibility
     '''
     calculate the expanded AES key given the base key.
     Depending on the length of the base key 11, 13 or 15 round keys are returned
